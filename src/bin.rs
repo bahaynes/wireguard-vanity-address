@@ -159,14 +159,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     println!("hit Ctrl-C to stop");
 
-    let i = 0;
-    while {
-      i
-      .into_par_iter()
-      .map(|_| trial(&prefix, 0, end))
-      .filter_map(|r| r)
-      .try_for_each(print)?;
-      i++;
-      Ok(())
-    }
+    // 1M trials takes about 10s on my laptop, so let it run for 1000s
+    (0..2_147_483_647)
+        .into_par_iter()
+        .map(|_| trial(&prefix, 0, end))
+        .filter_map(|r| r)
+        .try_for_each(print)?;
+    Ok(())
 }
